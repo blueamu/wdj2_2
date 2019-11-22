@@ -20,6 +20,18 @@ Route::resource('/comments', 'CommentController');
 
 Route::resource('/questions', 'QuestionController');
 
+Route::resource('/infos', 'InfoController');
+Route::patch('/infos/update', 'InfoController@update');
+Route::delete('/infos/delete', 'InfoController@destroy');
+Route::post('/infos/create', 'InfoController@create');
+
+Route::resource('/places', 'PlaceController');
+Route::patch('/places/update', 'PlaceController@update');
+Route::delete('/places/delete', 'PlaceController@destroy');
+Route::post('/places/create', 'PlaceController@create');
+
+
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
