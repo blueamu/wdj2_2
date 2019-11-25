@@ -26,7 +26,11 @@
             <p> {{ $info->objective }} </p>
         @empty
         <p>No text</p>
-        <a href="{{ route('infos.create') }}" class="btn btn-info">생성</a>
+        @if (Auth::check())
+            @if (Auth::user()->id<=6)
+                <a href="{{ route('infos.create') }}" class="btn btn-info">생성</a>
+            @endif
+        @endif
         @endforelse
         <div>
         @if (Auth::check())
@@ -41,8 +45,102 @@
                 @endforeach
             @endif
         @endif
+        <br />
+        <br />
         </div>
-        <h2>시간표</h2>
+        <!-- <h2>시간표</h2>
+        <table class="table table-striped table-bordered table-hover">
+            <tr>
+                <th>#</th>
+                <th>월</th>
+                <th>화</th>
+                <th>수</th>
+                <th>목</th>
+                <th>금</th>
+                <th>토</th>
+                <th>일</th>
+            </tr>
+            <tr>
+                <td>1교시</td>
+                @foreach ($timetables as $row)
+                    @if ($row->time==1)
+                        <td>{{ $row->subject }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
+            </tr>
+            <tr>
+                <td>2교시</td>
+                @foreach ($timetables as $row)
+                    @if ($row->time==2)
+                        <td>{{ $row->subject }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
+            </tr>
+            <tr>
+                <td>3교시</td>
+                @foreach ($timetables as $row)
+                    @if ($row->time==3)
+                        <td>{{ $row->subject }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
+            </tr>
+            <tr>
+                <td>4교시</td>
+                @foreach ($timetables as $row)
+                    @if ($row->time==4)
+                        <td>{{ $row->subject }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
+            </tr>
+            <tr>
+                <td>5교시</td>
+                @foreach ($timetables as $row)
+                    @if ($row->time==5)
+                        <td>{{ $row->subject }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
+            </tr>
+            <tr>
+                <td>6교시</td>
+                @foreach ($timetables as $row)
+                    @if ($row->time==6)
+                        <td>{{ $row->subject }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
+            </tr>
+            <tr>
+                <td>7교시</td>
+                @foreach ($timetables as $row)
+                    @if ($row->time==7)
+                        <td>{{ $row->subject }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
+            </tr>
+            <tr>
+                <td>8교시</td>
+                @foreach ($timetables as $row)
+                    @if ($row->time==8)
+                        <td>{{ $row->subject }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
+            </tr>
+        </table> -->
         <br />
         <br />
         <h2>체험지</h2>
@@ -53,6 +151,8 @@
             <a href="{{ route('places.create') }}" class="btn btn-info">생성</a>
             @endif
         @endif
+        <br />
+        <br />
         <div class="row">
         @foreach($places as $row)
             <div class="col-lg-3 col-md-3 col-sm-3 mb-3" >

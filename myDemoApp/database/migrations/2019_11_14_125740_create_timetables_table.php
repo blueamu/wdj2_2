@@ -17,7 +17,7 @@ class CreateTimetablesTable extends Migration
             $table->bigIncrements('id');
             $table->string('time'); // MON, TUE, WED, THR, FIR, SAT, SUN
             $table->string('day'); // 1교시, 2교시, 3교시 ....
-            $table->string('content'); // 과목 표시
+            $table->string('subject'); // 과목 표시
             $table->timestamps();
         });
     }

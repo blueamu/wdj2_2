@@ -30,7 +30,10 @@ Route::patch('/places/update', 'PlaceController@update');
 Route::delete('/places/delete', 'PlaceController@destroy');
 Route::post('/places/create', 'PlaceController@create');
 
-
+Route::resource('/timatables', 'TimetableController');
+Route::patch('/timatables/update', 'TimetableController@update');
+Route::delete('/timatables/delete', 'TimetableController@destroy');
+Route::post('/timatables/create', 'TimetableController@create');
 
 Auth::routes();
 

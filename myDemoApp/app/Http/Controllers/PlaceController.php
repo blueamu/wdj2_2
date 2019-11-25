@@ -46,7 +46,7 @@ class PlaceController extends Controller
 
         $img = $request->file('place_picture');
 
-        $new_name = rand() . '.' . $img->getClientOriginalExtension();
+        $new_name = rand() . '_' . $request->title . '.' . $img->getClientOriginalExtension();
         $img->move(public_path('images/places'), $new_name);
         $form_data = array(
             'place_picture' => $new_name,
@@ -105,7 +105,7 @@ class PlaceController extends Controller
                 'place_picture' => 'required|image|max:2048',
             ]);
 
-            $img_name = rand() . '.' . $img->getClientOriginalExtension();
+            $img_name = rand() . '_' . $request->title . '.' . $img->getClientOriginalExtension();
             $img->move(public_path('images/places'), $img_name);
         }
         else
