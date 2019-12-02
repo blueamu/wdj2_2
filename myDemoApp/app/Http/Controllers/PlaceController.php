@@ -25,7 +25,15 @@ class PlaceController extends Controller
      */
     public function create()
     {
-        return view('places.create');
+        if($request->hasFile('place_img')){
+
+            $img = $request->file('place_img');
+    
+            $new_name = rand() . '_' . $request->place_title . '.' . $img->getClientOriginalExtension();
+            $img->move(public_path('images'), $new_name);
+        }
+        return response()->json($new_name);
+        // return view('places.create');
     }
 
     /**
@@ -36,30 +44,47 @@ class PlaceController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'place_picture' => 'required|image|max:2048',
-            'title' =>  'required',
-            'body' => 'required',
-        ]);
+        $place_datas = $request->all();
 
-        if($request->hasFile('place_picture')){
+        // $form_data = array(
+        //     'place_picture' => $place_datas['place_img'],
+        //     'title' => $place_datas['place_title'],
+        //     'body' => $place_datas['place_body'],
+        // );
+
+        // $request->validate([
+        //     'place_picture' => 'required|image|max:2048',
+        //     'title' =>  'required',
+        //     'body' => 'required',
+        // ]);
+        
+        if($place_datas->hasFile('place_picture')){
 
         $img = $request->file('place_picture');
 
-        $new_name = rand() . '_' . $request->title . '.' . $img->getClientOriginalExtension();
+        $new_name = rand() . '_' . $place_datas->title . '.' . $img->getClientOriginalExtension();
         $img->move(public_path('images/places'), $new_name);
         $form_data = array(
             'place_picture' => $new_name,
-            'title' => $request->title,
-            'body' => $request->body
+            'title' => $place_datas['place_title'],
+            'body' => $place_datas['place_body'],
+            // 'title' => $request->title,
+            // 'body' => $request->body
         );
 
         \App\Place::create($form_data);
 
         }
 
-        return redirect('infos')->with('success', 'Data Added successfully');
+        $form_data->validate([
+            'place_picture' => 'required|image|max:2048',
+            'title' =>  'required',
+            'body' => 'required',
+        ]);
+        // return redirect('infos')->with('success', 'Data Added successfully');
         // 파일저장성공
+
+        return response()->json($form_data);
     }
 
     /**
@@ -93,38 +118,72 @@ class PlaceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    public function upload(Request $request)
     {
-        $image_name = $request->hidden_img;
-        $img = $request->file('place_picture');
-        if($img != '')
-        {
-            $request->validate([
-                'title' =>  'required',
-                'body' => 'required',
-                'place_picture' => 'required|image|max:2048',
-            ]);
+        if($request->hasFile('place_img')){
 
-            $img_name = rand() . '_' . $request->title . '.' . $img->getClientOriginalExtension();
-            $img->move(public_path('images/places'), $img_name);
+            $img = $request->file('place_img');
+    
+            $new_name = rand() . '_' . $request->place_title . '.' . $img->getClientOriginalExtension();
+            $img->move(public_path('images'), $new_name);
         }
-        else
-        {
-            $request->validate([
-                'title' =>  'required',
-                'body' => 'required',
-            ]);
-        }
+        return response()->json($new_name);
+    }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $datas = $request->all();
+        $id = $datas['place_id'];
         $form_data = array(
-            'title' => $request->title,
-            'body' => $request->body,
-            'place_picture' => $img_name 
+            'place_picture'=>$datas['place_img'],
+            'title' => $datas['place_title'],
+            'body' => $datas['place_body'],
         );
 
-        \App\Place::whereId($id)->update($form_data);
+        \App\Place::whereId($id)
+            ->update($form_data);
 
-        return redirect('infos')->with('success', 'Data is successfully updated');
+        // return response()->json(['id'=>$id, $form_data]);
+        return response()->json($form_data);
+
+        // $image_name = $request->hidden_img;
+        // $img = $request->file('place_picture');
+        // if($img != '')
+        // {
+        //     $request->validate([
+        //         'title' =>  'required',
+        //         'body' => 'required',
+        //         'place_picture' => 'required|image|max:2048',
+        //     ]);
+
+        //     $img_name = rand() . '_' . $request->title . '.' . $img->getClientOriginalExtension();
+        //     $img->move(public_path('images/places'), $img_name);
+        // }
+        // else
+        // {
+        //     $request->validate([
+        //         'title' =>  'required',
+        //         'body' => 'required',
+        //     ]);
+        // }
+
+        // $form_data = array(
+        //     'title' => $request->title,
+        //     'body' => $request->body,
+        //     'place_picture' => $img_name 
+        // );
+
+        // \App\Place::whereId($id)->update($form_data);
+
+        // return redirect('infos')->with('success', 'Data is successfully updated');
 
     }
 
