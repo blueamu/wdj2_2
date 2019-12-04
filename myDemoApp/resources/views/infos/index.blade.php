@@ -72,7 +72,7 @@
                 <br />
                 <label for="place">사진</label>
                 <br />
-                <input type="file" name="new_img" id="new_image">
+                <input type="file" name="new_img" id="new_img">
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" id="p_store_btn">저장하기</button>
@@ -103,11 +103,11 @@
         @foreach($places as $row)
             <div class="col-xs-6 col-sm-3" id="place_cards" >
                 <div class="card h-100">
-                    <img class="card-img-top" id="place_img" src="/images/places/{{$row->place_picture}}" alt="이미지 없음">
+                    <img class="card-img-top" id="place_imgs" src="/images/places/{{$row->place_picture}}" alt="이미지 없음">
                     <div class="card-body">
-                    <h4 class="card-title" id="place_title">{{$row->title}}</h4>
-                    <p class="card-text" id="place_body">{{$row->body}}</p>
-                    <input type="text" name="place_id" id="place_id" value="{{ $row['id'] }}">
+                    <h4 class="card-title" id="place_titles">{{$row->title}}</h4>
+                    <p class="card-text" id="place_bodys">{{$row->body}}</p>
+                    <input type="hidden" name="place_ids" id="place_ids" value="{{ $row['id'] }}">
                     </div>
                     <div class="card-footer">
                     <a href="{{ route('places.show', $row ->id) }}" class="btn btn-primary">상세보기</a>

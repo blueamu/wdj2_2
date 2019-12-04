@@ -100,7 +100,9 @@ class PlaceController extends Controller
      */
     public function show($id)
     {
-        //
+        $place = \App\Place::findorFail($id); //  id를 검색 그러나 결과가 발견되지 않으면 예외 발생
+        
+        return view('places.show', compact('place'));
     }
 
     /**
@@ -130,9 +132,9 @@ class PlaceController extends Controller
         // $imgData = base64_encode(file_get_contents($file_path));
         // $src = 'data: ' . mime_content_type($file_path) . ';base64,' . $imgData;
 
-        if($request->hasFile('new_img')){
+        if($request->hasFile('place_img')){
 
-            $img = $request->file('new_img');
+            $img = $request->file('place_img');
             
             // $imgData = base64_encode(file_get_contents($img));
             // $src = 'data: ' . mime_content_type($img) . ';base64,' . $imgData;
@@ -161,11 +163,9 @@ class PlaceController extends Controller
             'body' => $datas['place_body'],
         );
 
-        \App\Place::whereId($id)
-            ->update($form_data);
-
-        // return response()->json(['id'=>$id, $form_data]);
+        \App\Place::whereId($id)->update($form_data);
         return response()->json($form_data);
+        // return response()->json(['id'=>$id, $form_data]);
 
         // $image_name = $request->hidden_img;
         // $img = $request->file('place_picture');

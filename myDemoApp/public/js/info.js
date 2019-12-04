@@ -12,36 +12,36 @@ var filename;
 var new_info_outline = this.document.createElement('input');
 new_info_outline.setAttribute('type', 'text');
 new_info_outline.setAttribute('id', 'info_outline');
+new_info_outline.setAttribute('rows', '10');
 new_info_outline.setAttribute('class', 'form-control');
 
 var new_info_objective = this.document.createElement('input');
 new_info_objective.setAttribute('type', 'text');
 new_info_objective.setAttribute('id', 'info_objective');
+new_info_objective.setAttribute('rows', '10');
 new_info_objective.setAttribute('class', 'form-control');
 
 var new_place_title = this.document.createElement('input');
 new_place_title.setAttribute('type', 'text');
 new_place_title.setAttribute('id', 'place_title');
-// new_place_title.setAttribute('class', 'card-title');
 new_place_title.setAttribute('class', 'form-control');
 
 var new_place_body = this.document.createElement('input');
 new_place_body.setAttribute('type', 'text');
 new_place_body.setAttribute('id', 'place_body');
-// new_place_body.setAttribute('class', 'card-body');
 new_place_body.setAttribute('class', 'form-control');
 
 var new_place_img = this.document.createElement('input');
-new_place_img.setAttribute('type', 'img');
+new_place_img.setAttribute('type', 'file');
 new_place_img.setAttribute('id', 'place_img');
 new_place_img.addEventListener("change", handleFiles, false);
 function handleFiles() {
     file = this.files[0]; /* now you can work with the file list */
 }
-// new_place_img.setAttribute('calss', 'card-img');
 
 
 window.addEventListener('load', function() {
+    // 개요 및 목표 update 버튼 클릭시
     this.document.getElementById('info_update_btn').addEventListener('click', () => {
         old_info_outline = this.document.getElementById('info_outline');
         old_info_objective = this.document.getElementById('info_objective');
@@ -62,6 +62,7 @@ window.addEventListener('load', function() {
         this.document.getElementById('info_update_btn').addEventListener('click', info_patch_event);
     })
 
+    // '/infos' 에서  ajax로 체험지 바꿀려고 input 넣은것
     var create_check = 0;
 
     this.document.getElementById('place_create_btn').addEventListener('click', () => {
@@ -76,27 +77,29 @@ window.addEventListener('load', function() {
     })
 
 
-    var image_file = this.document.getElementById('new_image');
+    // var image_file = this.document.getElementById('new_image');
 
-    image_file.onchange = function(e) {
-        // var files = e.target.files;
-        var files = image_file.files;
-        console.log(files);
-        console.log(files[0]);
-        file = files[0];
+    // image_file.onchange = function(e) {
+    //     // var files = e.target.files;
+    //     var files = image_file.files;
+    //     console.log(files);
+    //     console.log(files[0]);
+    //     file = files[0];
         
-        alert(image_file.value);
-    }
+    //     alert(image_file.value);
+    // }
 
-    if(file) {
-        var fr = new FileReader();
-        fr.onload = function () {
-            file_src = fr.result;
-        }
-        fr.readAsDataURL(file);
-    }
-    console.log(file_src);
+    // if(file) {
+    //     var fr = new FileReader();
+    //     fr.onload = function () {
+    //         file_src = fr.result;
+    //     }
+    //     fr.readAsDataURL(file);
+    // }
+    // console.log(file_src);
 
+    // '/infos' 에서  ajax로 체험지 바꿀려고 저장 버튼 눌렀을 때
+    //  왜인지 fetch할 때  500 서버 에러 발생하지만..
     this.document.getElementById('p_store_btn').addEventListener('click', () => {
         
         console.log(file);
@@ -176,6 +179,7 @@ window.addEventListener('load', function() {
         })
     })
 
+    // place/show 에서 수정하기 버튼 클릭했을 때
     this.document.getElementById('p_update_btn').addEventListener('click', () => {
         old_place_title = this.document.getElementById('place_title');
         old_place_body = this.document.getElementById('place_body');
@@ -193,7 +197,6 @@ window.addEventListener('load', function() {
         new_place_body = change_element;  
 
         old_place_img.parentNode.replaceChild(new_place_img, old_place_img);
-
         file_path = old_place_img.value;
         if(file) {
             var fr = new FileReader();
@@ -215,8 +218,8 @@ window.addEventListener('load', function() {
         old_place_img = new_place_img;
         new_place_img = change_element;
 
-        this.document.getElementById('p_update_btn').textContent = (btn_place == "완료") ? "ajax 수정" : "완료";
-        this.document.getElementById('p_update_btn').addEventListener('click', place_patch_event(place_con, res.id));
+        this.document.getElementById('p_update_btn').textContent = (btn_place == "완료") ? "수정" : "완료";
+        this.document.getElementById('p_update_btn').addEventListener('click', place_patch_event);
     })
 })
 
@@ -259,11 +262,10 @@ var place_patch_event = () => {
             'Content-Type': 'application/json', 
             'X-CSRF-TOKEN': document.querySelector('#token').value,
         },
-        method: "PATCH",
+        method: "POST",
         body: JSON.stringify({
-            place_title: new_place_title.value,
-            fileData
-        })
+            place_title : new_place_title.value
+        }), fileData
     })
     .then(res => res.json())
     .then( (res) => {
