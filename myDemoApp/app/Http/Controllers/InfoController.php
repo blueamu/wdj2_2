@@ -15,8 +15,7 @@ class InfoController extends Controller
     {
         $infos = \App\Info::get();
         $places = \App\Place::latest()->paginate(10);
-        $timetables = \App\Timetable::get();
-        return view('infos.index', compact('infos', 'places', 'timetables'));
+        return view('infos.index', compact('infos', 'places'));
     }
 
     /**

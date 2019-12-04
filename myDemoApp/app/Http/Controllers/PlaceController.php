@@ -21,19 +21,20 @@ class PlaceController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        if($request->hasFile('place_img')){
+        return view('places.create');
+        // if($request->hasFile('place_img')){
 
-            $img = $request->file('place_img');
+        //     $img = $request->file('place_img');
     
-            $new_name = rand() . '_' . $request->place_title . '.' . $img->getClientOriginalExtension();
-            $img->move(public_path('images'), $new_name);
-        }
-        return response()->json($new_name);
-        // return view('places.create');
+        //     $new_name = rand() . '_' . $request->place_title . '.' . $img->getClientOriginalExtension();
+        //     $img->move(public_path('images/places'), $new_name);
+        // }
+        // return response()->json($new_name);
     }
 
     /**
@@ -46,45 +47,49 @@ class PlaceController extends Controller
     {
         $place_datas = $request->all();
 
+        $request->validate([
+            'new_img' => 'required|image|max:2048',
+            'new_title' =>  'required',
+            'new_body' => 'required',
+        ]);
+
         // $form_data = array(
         //     'place_picture' => $place_datas['place_img'],
         //     'title' => $place_datas['place_title'],
         //     'body' => $place_datas['place_body'],
         // );
 
-        // $request->validate([
-        //     'place_picture' => 'required|image|max:2048',
-        //     'title' =>  'required',
-        //     'body' => 'required',
-        // ]);
-        
-        if($place_datas->hasFile('place_picture')){
+        if($request->hasFile('new_img')){
 
-        $img = $request->file('place_picture');
+        $img = $request->file('new_img');
 
-        $new_name = rand() . '_' . $place_datas->title . '.' . $img->getClientOriginalExtension();
+        // $new_name = rand() . '_' . $place_datas->new_title . '.' . $img->getClientOriginalExtension();
+        $new_name = rand() . '_' . $request->new_title . '.' . $img->getClientOriginalExtension();
         $img->move(public_path('images/places'), $new_name);
         $form_data = array(
             'place_picture' => $new_name,
-            'title' => $place_datas['place_title'],
-            'body' => $place_datas['place_body'],
-            // 'title' => $request->title,
-            // 'body' => $request->body
+            'title' => $place_datas['new_title'],
+            'body' => $place_datas['new_body'],
+            // 'title' => $request->new_title,
+            // 'body' => $request->new_body
         );
+        }
+        
+        // 유효성 체크
+        // $form_data->validate([ 
+        //     'place_picture' => 'required|image|max:3072',
+        //     'title' =>  'required',
+        //     'body' => 'required',
+        // ]);
 
         \App\Place::create($form_data);
 
-        }
-
-        $form_data->validate([
-            'place_picture' => 'required|image|max:2048',
-            'title' =>  'required',
-            'body' => 'required',
-        ]);
-        // return redirect('infos')->with('success', 'Data Added successfully');
+        
+        
+        return redirect('infos')->with('success', 'Data Added successfully');
         // 파일저장성공
 
-        return response()->json($form_data);
+        // return response()->json($form_data);
     }
 
     /**
@@ -121,12 +126,20 @@ class PlaceController extends Controller
 
     public function upload(Request $request)
     {
-        if($request->hasFile('place_img')){
+        // $file_path-> $request->place_img;
+        // $imgData = base64_encode(file_get_contents($file_path));
+        // $src = 'data: ' . mime_content_type($file_path) . ';base64,' . $imgData;
 
-            $img = $request->file('place_img');
-    
-            $new_name = rand() . '_' . $request->place_title . '.' . $img->getClientOriginalExtension();
-            $img->move(public_path('images'), $new_name);
+        if($request->hasFile('new_img')){
+
+            $img = $request->file('new_img');
+            
+            // $imgData = base64_encode(file_get_contents($img));
+            // $src = 'data: ' . mime_content_type($img) . ';base64,' . $imgData;
+
+            // $new_name = rand() . '_' . $request->place_title . '.' . $img->getClientOriginalExtension();
+            $new_name = rand() . '.' . $img->getClientOriginalExtension();
+            $img->move(public_path('images/places'), $new_name);
         }
         return response()->json($new_name);
     }

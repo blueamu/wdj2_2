@@ -6,6 +6,7 @@ var old_place_body;
 var old_place_img;
 
 var file;
+var file_src;
 var filename;
 
 var new_info_outline = this.document.createElement('input');
@@ -74,25 +75,78 @@ window.addEventListener('load', function() {
         }
     })
 
+
+    var image_file = this.document.getElementById('new_image');
+
+    image_file.onchange = function(e) {
+        // var files = e.target.files;
+        var files = image_file.files;
+        console.log(files);
+        console.log(files[0]);
+        file = files[0];
+        
+        alert(image_file.value);
+    }
+
+    if(file) {
+        var fr = new FileReader();
+        fr.onload = function () {
+            file_src = fr.result;
+        }
+        fr.readAsDataURL(file);
+    }
+    console.log(file_src);
+
     this.document.getElementById('p_store_btn').addEventListener('click', () => {
-        fetch('/places/create', {
+        
+        console.log(file);
+        console.log(image_file);
+        console.log(file);
+        
+        var fileData = new FormData();
+        fileData.append('new_img', file);
+        console.log(fileData.getAll('new_img'));  
+
+        fetch("{{ route('places.store') }}", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json', 
                 'X-CSRF-TOKEN': document.querySelector('#token').value,
             },
-            method: "POST",
-            body: JSON.stringify({
-                place_title: this.document.getElementById('new_title').value,
-                place_body: this.document.getElementById('new_body').value,
-                place_img: this.document.getElementById('new_image').value
-            }) 
-            // 저장할때 json 형식으로 못 받아서 오류남.
-            // js 파일에서 이미지 링크 변환시키고 컨트롤러로 넘겨야 할듯
-            // 컨트롤러에서 create를 이미지 만들게 하고 store로 저장하듯이 하면
-            .then(res =>res.json())
+            method: "PATCH",
+            body: fileData
+            // body: JSON.stringify({
+            //     place_title: this.document.getElementById('new_title').value,
+            //     place_body: this.document.getElementById('new_body').value,
+            //     place_img: file_path
+                // place_img: new_image.src
+            // }) 
+        // 저장할때 json 형식으로 못 받아서 오류남.
+        // js 파일에서 이미지 링크 변환시키고 컨트롤러로 넘겨야 할듯
+        // 컨트롤러에서 create를 이미지 만들게 하고 store로 저장하듯이 하면
+        })
+        .then(res =>res.json())
+        .then( (res) => {
+            console.log(res);
+            filename = res;
+
+            fetch('/places/store', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json', 
+                    'X-CSRF-TOKEN': document.querySelector('#token').value,
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    place_title: this.document.getElementById('new_title').value,
+                    place_body: this.document.getElementById('new_body').value,
+                    place_img: filename
+                }) 
+            })
+            .then(res=>res.json())
             .then( (res) => {
                 console.log(res);
+
                 // var place_con = document.createElement('div');
                 // place_con.innerHTML = document.querySelector('#add_card').innerHTML;
                 // place_con.removeAttribute('style', 'display:none;');
@@ -100,23 +154,24 @@ window.addEventListener('load', function() {
                 // place_con.querySelector('h4').textContent = document.querySelector('place_title').value;
                 // place_con.querySelector('p').textContent = document.querySelector('place_body').value;
                 
-                var place_cards = document.createElement('div');
-                place_cards.innerHTML = document.querySelector('#place_card').innerHTML;
-                place_cards.setAttribute('class', 'col-xs-6 col-sm-3');
+                var place_card = document.createElement('div');
+                place_card.innerHTML = document.querySelector('#place_cards').innerHTML;
+                place_card.setAttribute('class', 'col-xs-6 col-sm-3');
+                console.log(place_card);
                 //place_cards.querySelector('img').value = res.place_picture;
-                place_card_img.innerHTML = document.querySelector('#place_img').innerHTML;
-                place_card_img.setAttribute('src', '/images/places/{{' + res.place_picture + '}}');
-                place_cards.querySelector('h4').textContent = res.title;
-                place_cards.querySelector('p').textContent = res.body;
+                // place_card_img.innerHTML = document.querySelector('#place_img').innerHTML;
+                // place_card_img.setAttribute('src', '/images/places/{{' + res.place_picture + '}}');
+                // place_card.querySelector('h4').textContent = res.title;
+                // place_card.querySelector('p').textContent = res.body;
                 
-                var p_update_btn = place_con.querySelector('#p_update_btn');
-                var p_delete_btn = place_con.querySelector('#p_delete_btn');
+                // var p_update_btn = place_con.querySelector('#p_update_btn');
+                // var p_delete_btn = place_con.querySelector('#p_delete_btn');
 
-                this.document.querySelector('#places').append(place_con);
+                this.document.querySelector('#places').append(place_card);
 
-                p_delete_btn.addEventListener('click', () => {
-                    p_delete_btn.addEventListener('click', place_delete_event(place_con, res.id));
-                })
+                // p_delete_btn.addEventListener('click', () => {
+                //     p_delete_btn.addEventListener('click', place_delete_event(place_con, res.id));
+                // })
             })
         })
     })

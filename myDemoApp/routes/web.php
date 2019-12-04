@@ -29,7 +29,8 @@ Route::resource('/places', 'PlaceController');
 Route::patch('/places/upload', 'PlaceController@upload');
 Route::patch('/places/update', 'PlaceController@update');
 Route::delete('/places/delete', 'PlaceController@destroy');
-Route::post('/places/create', 'PlaceController@create');
+Route::patch('/places/create', 'PlaceController@create');
+Route::post('/places/store', 'PlaceController@store');
 
 Auth::routes();
 
