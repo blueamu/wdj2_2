@@ -2,7 +2,7 @@
 
 @section('content')
 <div text_align="right">
-    <a href="{{ route('infos.index') }}" class="btn btn-default">조원목록</a>
+    <a href="{{ route('infos.index') }}" class="btn btn-default">BACK</a>
 </div>
 <br />
 

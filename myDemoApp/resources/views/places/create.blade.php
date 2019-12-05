@@ -27,27 +27,28 @@
 
 <form method="post" action="{{ route('places.store') }}" enctype="multipart/form-data">
     @csrf
-    <div class="form-group">
-        <label class="col-md-4 text-right">체험지</label>
-        <div class="col-md-8">
+    <div class="form-group text-center">
+        <label class="col-md-4 text-center">체험지</label>
+        <div class="col-md-12 text-center">
             <input type="text" name="new_title" id="new_title" class="form-control input-lg" />
         </div>
     </div>
     <br />
     <br />
-    <div class="form-group">
-        <label class="col-md-4 text-right">체험지 소개</label>
-        <div class="col-md-8">
-            <input type="text" name="new_body" id="new_body" row="10" class="form-control input-lg" />
+    <div class="form-group text-center">
+        <label class="col-md-4 text-center">체험지 소개</label>
+        <div class="col-md-12 text-center">
+            <input type="text" name="new_body" id="new_body" rows="10" class="form-control input-lg" />
         </div>
     </div>
     <br />
     <br />
-    <div class="form-group">
-        <label class="col-md-4 text-right">체험지 사진</label>
-        <div class="col-md-8">
+    <div class="form-group text-center">
+        <label class="col-md-4 text-center">체험지 사진</label>
+        <div class="col-md-12 text-center">
             <input type="file" name="new_img" id="new_img" onchange="reviewUploadImg(this);" multiple="multiple" />
-        </div>    
+        </div>   
+        <img src=""> 
     </div>
     <br />
     <br />
@@ -55,7 +56,7 @@
     <div class="form-group text-center">
             <!-- <input type="submit" name="add_place" id="add_place" class="btn btn-primary input-lg"/>  -->
 
-            <button id="add_place" type="submit">추가</button>
+        <button id="add_place" type="submit" class="btn btn-primary">추가</button>
     </div>
 </form>
 @endsection

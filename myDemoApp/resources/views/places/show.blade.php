@@ -24,6 +24,11 @@
         @if (Auth::user()->id<=6)
             <button class="btn btn-warning" id="p_update_btn">수정</button>
             <button class="btn btn-danger" id="p_delete_btn">삭제</button>
+            <form action="{{ route('places.destroy',$place->id) }}" method="POST" class="inline_form">
+                @csrf
+                {{ method_field('DELETE') }}
+                <button class="btn btn-primary">삭제</button>
+            </form>
         @else
         @endif
     @endif

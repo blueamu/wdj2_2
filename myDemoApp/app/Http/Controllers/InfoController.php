@@ -9,6 +9,7 @@ class InfoController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * 
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -89,15 +90,6 @@ class InfoController extends Controller
 
         $datas = $request->all();
         $id = $datas['id'];
-        // \App\Info::find($id)
-        //     ->update(['info_outline'=>$datas['info_outline'],
-        //             'info_objective'=>$datas['info_objective']]);
-        
-
-        // $request->validate([
-        //     'outline' =>  'required',
-        //     'objective' => 'required',
-        // ]);
         
         $form_data = array(
             'outline' => $datas['info_outline'],
@@ -119,11 +111,9 @@ class InfoController extends Controller
      */
     public function destroy(\App\Info $info)
     {
-        //$info = Info::where('outline', $info->outline)->delete();
-        //$info = Info::where('objective', $info->objective)->delete();
         $info->delete();
 
-        return redirect('infos')->with('success', 'Data is successfully deleted');
+        return redirect('infos');
     }
 
 }

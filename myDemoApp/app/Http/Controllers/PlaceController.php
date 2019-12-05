@@ -208,8 +208,8 @@ class PlaceController extends Controller
      */
     public function destroy($id)
     {
-        $place = \App\Place::findorFail($id);
+        $place = \App\Place::find($id);
         $place->delete();
-        return redirect('infos')->with('success', 'Data is successfully deleted');
+        return redirect('infos');
     }
 }

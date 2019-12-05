@@ -17,18 +17,15 @@
 <form method="post" action="{{ route('infos.store') }}" enctype="multipart/form-data">
     
     @csrf
-    <div class="form-group">
-        <label class="col-md-4 text-right">개요</label>
-        <div class="col-md-8">
-            <textarea name="outline" rows ="10" class="form-control input-lg" > </textarea>
-        </div>
+    <div class="form-group text-center">
+        <label class="col-md-4 text-center">개요</label>
+        <textarea name="outline" rows ="5" class="form-control" ></textarea>
     </div>
     <br />
     <br />
-    <div class="form-group">
-        <label class="col-md-4 text-right">목표</label>
-            <textarea name="objective" rows ="10" class="form-control input-lg">
-            </textarea> 
+    <div class="form-group text-center">
+        <label class="col-md-4 text-center">목표</label>
+        <textarea name="objective" rows ="5" class="form-control "></textarea> 
     </div>
     <br />
     <br />
